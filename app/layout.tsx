@@ -8,8 +8,8 @@ const primaryTypeface = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "the sky is blue here 💙",
-  description: "a small collection of my projects, links, and thoughts. mostly this is just self expression.",
+  title: "andrey's homepage 💙",
+  description: "a small collection of my projects, links, and thoughts. mostly this is just self expression \\o/",
 };
 
 export default function RootLayout({
