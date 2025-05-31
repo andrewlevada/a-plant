@@ -19,13 +19,19 @@ export default function Home() {
         />
       </div>
 
-      <div className="relative z-10 grid grid-cols-3 px-[26px] pt-[22px]">
+      <div className="relative z-11 grid grid-cols-3 px-[26px] pt-[22px]">
         <div className="col-span-2 md:col-span-1 text-left space-y-2">
           <p>this is a place for my links</p>
 
           <p className="text-[#ffff00]">my name is andrew (or andrey), 20 years old <br />
           i really enjoy imagining and building digital things <br />
           that help, inspire, and feel nice</p>
+
+          <p>i&apos;d love to collab on building <br />
+          public benefit or socially important project <br />
+          <Link href="https://calendar.notion.so/meet/andrewlevada/cnux93o8a" target="_blank" className="underline">
+            book a call ↗
+          </Link></p>
         </div>
 
         <div className="col-span-1 text-center space-y-2 hidden md:block">
