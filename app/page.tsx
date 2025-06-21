@@ -67,7 +67,7 @@ export default function Home() {
                 }}
                 transition={{ duration: 0.2 }}
               >
-                <Link href={link.href} target="_blank">
+                <Link href={link.internal ? link.href : link.href} target={link.internal ? undefined : "_blank"}>
                   <p className="text-center min-w-max">{link.content}</p>
                 </Link>
               </motion.div>
@@ -85,6 +85,7 @@ interface FloatingLink {
   gridColumn: string;
   gridRow: string;
   rotate: number;
+  internal?: boolean;
 }
 
 const floatingLinks: FloatingLink[] = [
@@ -108,5 +109,13 @@ const floatingLinks: FloatingLink[] = [
     gridColumn: "18 / span 2",
     gridRow: "3 / span 2",
     rotate: -8
+  },
+  {
+    href: "/cal",
+    content: (<>→ <br /> my june 2025 <br /> cal</>),
+    gridColumn: "10 / span 2",
+    gridRow: "5 / span 2",
+    rotate: -2,
+    internal: true
   }
 ]
