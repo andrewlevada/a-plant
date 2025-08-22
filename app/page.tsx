@@ -117,5 +117,13 @@ const floatingLinks: FloatingLink[] = [
     gridRow: "5 / span 2",
     rotate: -2,
     internal: true
+  },
+  {
+    href: "/empty",
+    content: (<>→ <br /> empty</>),
+    gridColumn: "3 / span 2",
+    gridRow: "6 / span 2",
+    rotate: -2,
+    internal: true
   }
 ]
