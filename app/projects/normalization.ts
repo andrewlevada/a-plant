@@ -4,17 +4,18 @@ export function normalizeProjects(input: unknown): Project[] {
   if (!Array.isArray(input)) {
     throw new Error('Expected an array of projects at root')
   }
+
   return input.map((raw) => {
-    const title = typeof (raw as any)?.title === 'string' ? (raw as any).title : ''
+    const title = typeof (raw)?.title === 'string' ? (raw).title : ''
     if (!title) throw new Error('Project title is required')
 
-    const rawStatus = typeof (raw as any)?.status === 'string' ? (raw as any).status : 'yellow'
+    const rawStatus = typeof (raw)?.status === 'string' ? (raw).status : 'yellow'
     const status: ProjectStatus =
       rawStatus === 'green' || rawStatus === 'yellow' || rawStatus === 'red'
         ? rawStatus
         : 'yellow'
 
-    const rawTodos = Array.isArray((raw as any)?.todos) ? (raw as any).todos : []
+    const rawTodos = Array.isArray((raw)?.todos) ? (raw).todos : []
     const todos: Todo[] = rawTodos
       .map((t: unknown) => {
         if (typeof t === 'string') {
