@@ -2,6 +2,8 @@
 
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
 
+const DEFAULT_DURATION = 2200
+
 type Toast = { id: number; message: string }
 
 type ToastContextValue = {
@@ -25,7 +27,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => {
       hideCurrent()
-    }, 1200)
+    }, DEFAULT_DURATION)
   }, [hideCurrent])
 
   const value = useMemo(() => ({ showToast }), [showToast])

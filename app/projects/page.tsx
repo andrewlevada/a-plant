@@ -5,6 +5,7 @@ import type { Project, ProjectStatus } from './lib/types'
 import { normalizeProjects } from './lib/normalization'
 import DataEditorModal from './DataEditorModal'
 import AddTaskButton from './AddTaskButton'
+import ClearDoneButton from './ClearDoneButton'
 import TaskCreateModal from './TaskCreateModal'
 import { useToast } from '../components/toast/useToast'
 import { addTodoToProjects } from './lib/todos'
@@ -68,11 +69,18 @@ export default function ProjectsPage() {
     setIsModalOpen(false)
   }
 
-  const clearAll = () => {
-    try {
-      localStorage.removeItem(STORAGE_KEY)
-    } catch {}
-    setProjects([])
+  const doneCount = useMemo(() => {
+    return projects.reduce((count, project) => count + project.todos.filter((t) => t.done).length, 0)
+  }, [projects])
+
+  const clearDone = () => {
+    if (doneCount === 0) return
+    const next = projects.map((project) => ({
+      ...project,
+      todos: project.todos.filter((t) => !t.done),
+    }))
+    saveProjects(next)
+    showToast(`Ah, a new day! ${doneCount} less todos. Time to get to work`)
   }
 
   const sortedProjects = useMemo(() => {
@@ -97,12 +105,8 @@ export default function ProjectsPage() {
             >
               Edit data
             </button>
-            <button
-              onClick={clearAll}
-              className="text-[14px] px-3 py-1.5 rounded-md border border-black/20 bg-white text-slate-800 hover:bg-white/80 active:bg-white/70 transition-colors"
-            >
-              Clear all
-            </button>
+            
+            <ClearDoneButton onClick={clearDone} disabled={doneCount === 0} />
           </div>
         </div>
 
