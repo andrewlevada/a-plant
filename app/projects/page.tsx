@@ -1,9 +1,13 @@
 "use client"
 
 import { useEffect, useMemo, useState } from 'react'
-import type { Project, ProjectStatus } from './types'
-import { normalizeProjects } from './normalization'
+import type { Project, ProjectStatus } from './lib/types'
+import { normalizeProjects } from './lib/normalization'
 import DataEditorModal from './DataEditorModal'
+import AddTaskButton from './AddTaskButton'
+import TaskCreateModal from './TaskCreateModal'
+import { useToast } from '../components/toast/useToast'
+import { addTodoToProjects } from './lib/todos'
 
 const STORAGE_KEY = 'projectsData'
 
@@ -13,13 +17,13 @@ function statusToBg(status: ProjectStatus): string {
   return 'bg-red-600'
 }
 
-// normalization moved to './normalization'
-
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editorValue, setEditorValue] = useState('')
   const [editorError, setEditorError] = useState('')
+  const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const { showToast } = useToast()
 
   // Load projects from localStorage on mount
   useEffect(() => {
@@ -39,18 +43,16 @@ export default function ProjectsPage() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
     } catch {
-      // ignore quota errors
+      alert('Sorry, free space in the localStorage has run out. Try deleting some of the tasks or projects')
     }
   }
 
-  const toggleTodo = (projectTitle: string, todoText: string) => {
+  const toggleTodo = (projectTitle: string, todoId: string) => {
     const next = projects.map((project) => {
       if (project.title !== projectTitle) return project
       return {
         ...project,
-        todos: project.todos.map((t) =>
-          t.text === todoText ? { ...t, done: !t.done } : t,
-        ),
+        todos: project.todos.map((t) => (t.id === todoId ? { ...t, done: !t.done } : t)),
       }
     })
     saveProjects(next)
@@ -65,8 +67,6 @@ export default function ProjectsPage() {
   const closeEditor = () => {
     setIsModalOpen(false)
   }
-
-  // editor save handled inline in modal's onSave
 
   const clearAll = () => {
     try {
@@ -127,8 +127,8 @@ export default function ProjectsPage() {
               <ul className="space-y-1.5">
                 {project.todos.map((todo) => (
                   <li
-                    key={todo.text}
-                    onClick={() => toggleTodo(project.title, todo.text)}
+                    key={todo.id}
+                    onClick={() => toggleTodo(project.title, todo.id)}
                     className={`text-[14px] leading-[1.5] font-normal relative cursor-pointer select-none transition-opacity duration-150 ${todo.done ? 'line-through opacity-80' : ''}`}
                   >
                     {todo.text}
@@ -160,8 +160,20 @@ export default function ProjectsPage() {
           }}
         />
       )}
+
+      <TaskCreateModal
+        isOpen={isCreateOpen}
+        projects={sortedProjects}
+        onClose={() => setIsCreateOpen(false)}
+        onCreate={(projectTitle, text) => {
+          const next = addTodoToProjects(projects, projectTitle, text)
+          saveProjects(next)
+          setIsCreateOpen(false)
+          showToast('Created the task 🤍')
+        }}
+      />
+
+      <AddTaskButton onClick={() => setIsCreateOpen(true)} />
     </div>
   )
 }
-
-

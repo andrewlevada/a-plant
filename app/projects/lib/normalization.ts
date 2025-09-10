@@ -1,3 +1,4 @@
+import { generateId } from './todos'
 import type { Project, ProjectStatus, Todo } from './types'
 
 export function normalizeProjects(input: unknown): Project[] {
@@ -19,8 +20,9 @@ export function normalizeProjects(input: unknown): Project[] {
     const todos: Todo[] = rawTodos
       .map((t: unknown) => {
         if (typeof t === 'string') {
-          return { text: t, done: false }
+          return { id: '', text: t, done: false }
         }
+
         if (
           t !== null &&
           typeof t === 'object' &&
@@ -30,14 +32,22 @@ export function normalizeProjects(input: unknown): Project[] {
           const text = (t as { text: string }).text
           const doneValue = (t as { done?: unknown }).done
           const done = typeof doneValue === 'boolean' ? doneValue : Boolean(doneValue)
-          return { text, done }
+          const maybeId = (t as { id?: unknown }).id
+          const id = typeof maybeId === 'string' ? maybeId : ''
+          return { id, text, done }
         }
+
         return null
       })
-      .filter((x: Todo | null): x is Todo => Boolean(x))
+      .filter((x: Todo | null): x is Todo => Boolean(x)) // filter out nulls from the previous step
+      .map(fillInMissingId)
 
     return { title, status, todos }
   })
+}
+
+function fillInMissingId(todo: Todo): Todo {
+  return { ...todo, id: todo.id && todo.id.length > 0 ? todo.id : generateId() }
 }
 
 

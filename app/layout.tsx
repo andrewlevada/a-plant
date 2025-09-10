@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { ToastProvider } from "./components/toast/ToastProvider";
 import "./globals.css";
 
 const primaryTypeface = localFont({
@@ -22,7 +23,9 @@ export default function RootLayout({
       <body
         className={`${primaryTypeface.variable} antialiased`}
       >
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );
