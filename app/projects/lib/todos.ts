@@ -33,4 +33,26 @@ export function areThereActiveTodos(project: Project): boolean {
   return project.todos.some((t) => !t.done)
 }
 
+export function reorderTodosWithinProject(
+  projects: Project[],
+  projectTitle: string,
+  fromIndex: number,
+  toIndex: number,
+): Project[] {
+  if (fromIndex === toIndex) return projects
+
+  return projects.map((p) => {
+    // skipping until we find the target project
+    if (p.title !== projectTitle) return p
+
+    const nextTodos = p.todos.slice()
+    const [moved] = nextTodos.splice(fromIndex, 1)
+    if (!moved) return p
+    
+    const clampedTo = Math.max(0, Math.min(toIndex, nextTodos.length))
+    nextTodos.splice(clampedTo, 0, moved)
+    return { ...p, todos: nextTodos }
+  })
+}
+
 

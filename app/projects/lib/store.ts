@@ -3,7 +3,7 @@
 import { useRef, useSyncExternalStore } from 'react'
 import { normalizeProjects } from './normalization'
 import type { Project, ProjectStatus } from './types'
-import { addTodoToProjects, areThereActiveTodos, toggleTodoById } from './todos'
+import { addTodoToProjects, areThereActiveTodos, toggleTodoById, reorderTodosWithinProject } from './todos'
 
 const STORAGE_KEY = 'projectsData'
 
@@ -86,6 +86,11 @@ class ProjectsStore {
     const project = this.projects.find(p => p.title === projectTitle)
     if (!project) return false
     return areThereActiveTodos(project)
+  }
+
+  reorderTodo(projectTitle: string, fromIndex: number, toIndex: number) {
+    const next = reorderTodosWithinProject(this.projects, projectTitle, fromIndex, toIndex)
+    this.persist(next)
   }
 }
 

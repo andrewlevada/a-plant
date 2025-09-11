@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from 'react'
-import StatusIndicator from './StatusIndicator'
+import ProjectCard from './ProjectCard'
 import ClearDoneButton from './ClearDoneButton'
 import AddTaskButton from './AddTaskButton'
 import EditDataButton from './EditDataButton'
@@ -31,37 +31,7 @@ export default function ProjectsPage() {
 
         <div className="flex flex-wrap gap-5">
           {sortedProjects.map((project) => (
-            <div
-              key={project.title}
-              className="relative w-full sm:w-[260px] bg-white text-slate-900 rounded-lg shadow-s p-5 overflow-visible"
-              style={project.todos.length === 0 || project.todos.every(t => t.done) ? { backgroundColor: '#FFFFFF30', border: 'none', boxShadow: 'none' } : {}}
-            >
-              <StatusIndicator
-                projectTitle={project.title}
-                className="absolute -top-3 -right-3"
-              />
-
-              <h2 className="text-[20px] leading-[1.2] font-semibold mb-3">
-                {project.title}
-              </h2>
-
-              <ul className="space-y-1.5">
-                {project.todos.map((todo) => (
-                  <li
-                    key={todo.id}
-                    onClick={() => {
-                      // direct import safe in client
-                      import('./lib/store').then(({ projectsStore }) => {
-                        projectsStore.toggleTodo(project.title, todo.id)
-                      })
-                    }}
-                    className={`text-[14px] leading-[1.5] font-normal relative cursor-pointer select-none transition-opacity duration-150 ${todo.done ? 'line-through opacity-80' : ''}`}
-                  >
-                    {todo.text}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ProjectCard key={project.title} project={project} />
           ))}
         </div>
       </div>
