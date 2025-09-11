@@ -1,19 +1,23 @@
 "use client"
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ProjectStatus } from './lib/types'
+import { projectsStore, useProjects } from './lib/store'
 
 type StatusIndicatorProps = {
-  status: ProjectStatus
-  onChange: (next: ProjectStatus) => void
+  projectTitle: string
   className?: string
 }
 
 const STATUSES: ProjectStatus[] = ['green', 'yellow', 'red']
 
-export default function StatusIndicator({ status, onChange, className = '' }: StatusIndicatorProps) {
+export default function StatusIndicator({ projectTitle, className = '' }: StatusIndicatorProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement | null>(null)
+  const projects = useProjects()
+  const status: ProjectStatus = useMemo(() => {
+    return (projects.find((p) => p.title === projectTitle)?.status ?? 'yellow') as ProjectStatus
+  }, [projects, projectTitle])
 
   useEffect(() => {
     if (!open) return
@@ -49,7 +53,7 @@ export default function StatusIndicator({ status, onChange, className = '' }: St
                   type="button"
                   aria-label={`Set status ${s}`}
                   onClick={() => {
-                    onChange(s)
+                    projectsStore.setProjectStatus(projectTitle, s)
                     setOpen(false) // auto-close only after selecting
                   }}
                   className={`h-6 w-6 rounded-md ${statusToBg(s)} transition-transform hover:scale-105 active:scale-95 focus:outline-none`}

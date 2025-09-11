@@ -1,18 +1,16 @@
 "use client"
 
 import { useEffect, useRef, useState } from 'react'
-import type { Project } from './lib/types'
+import { useCreateTaskModalOpen, uiStore } from './lib/uiStore'
+import { useProjects, projectsStore } from './lib/store'
+import { useToast } from '../components/toast/useToast'
 
-type Props = {
-  isOpen: boolean
-  projects: Project[]
-  onClose: () => void
-  onCreate: (projectTitle: string, text: string) => void
-}
-
-export default function TaskCreateModal({ isOpen, projects, onClose, onCreate }: Props) {
+export default function TaskCreateModal() {
   const [text, setText] = useState('')
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const isOpen = useCreateTaskModalOpen()
+  const projects = useProjects()
+  const { showToast } = useToast()
 
   useEffect(() => {
     if (isOpen) {
@@ -24,12 +22,12 @@ export default function TaskCreateModal({ isOpen, projects, onClose, onCreate }:
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose()
+        uiStore.closeCreateTask()
       }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [onClose])
+  }, [])
 
   const canSubmit = text.trim().length > 0
 
@@ -37,7 +35,7 @@ export default function TaskCreateModal({ isOpen, projects, onClose, onCreate }:
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 text-black/90">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/40" onClick={() => uiStore.closeCreateTask()} />
 
       <div className="relative z-10 w-full max-w-3xl bg-white rounded-lg shadow-lg p-5">
         <input
@@ -49,11 +47,17 @@ export default function TaskCreateModal({ isOpen, projects, onClose, onCreate }:
         />
 
         <div className="mt-4 flex flex-wrap gap-[6px]">
-          {projects.sort((a, b) => a.title.localeCompare(b.title)).map((p) => (
+          {projects.slice().sort((a, b) => a.title.localeCompare(b.title)).map((p) => (
             <button
               key={p.title}
               className={`text-[13px] px-2.5 py-1.5 rounded-md border border-black/15 bg-white hover:bg-black/5 active:bg-black/10 transition-colors ${!canSubmit ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={() => canSubmit && onCreate(p.title, text.trim())}
+              onClick={() => {
+                if (!canSubmit) return
+                projectsStore.addTodo(p.title, text.trim())
+                setText('')
+                uiStore.closeCreateTask()
+                showToast('Created the task 🤍')
+              }}
               disabled={!canSubmit}
             >
               {p.title}
