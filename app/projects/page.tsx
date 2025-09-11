@@ -8,15 +8,10 @@ import AddTaskButton from './AddTaskButton'
 import ClearDoneButton from './ClearDoneButton'
 import TaskCreateModal from './TaskCreateModal'
 import { useToast } from '../components/toast/useToast'
-import { addTodoToProjects } from './lib/todos'
+import { addTodoToProjects, areThereActiveTodos } from './lib/todos'
+import StatusIndicator from './StatusIndicator'
 
 const STORAGE_KEY = 'projectsData'
-
-function statusToBg(status: ProjectStatus): string {
-  if (status === 'green') return 'bg-green-600'
-  if (status === 'yellow') return 'bg-yellow-600'
-  return 'bg-red-600'
-}
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([])
@@ -83,6 +78,11 @@ export default function ProjectsPage() {
     showToast(`Ah, a new day! ${doneCount} less todos. Time to get to work`)
   }
 
+  const setProjectStatus = (projectTitle: string, nextStatus: ProjectStatus) => {
+    const next = projects.map((p) => (p.title === projectTitle ? { ...p, status: nextStatus } : p))
+    saveProjects(next)
+  }
+
   const sortedProjects = useMemo(() => {
     const rank = { red: 0, yellow: 1, green: 2 } as const
     return projects.slice().sort((a, b) => rank[a.status] - rank[b.status])
@@ -115,13 +115,12 @@ export default function ProjectsPage() {
             <div
               key={project.title}
               className="relative w-full sm:w-[260px] bg-white text-slate-900 rounded-lg shadow-s p-5 overflow-visible"
-              style={(project.todos.length == 0) ? { backgroundColor: '#FFFFFF30', border: 'none', boxShadow: 'none' } : {}}
+              style={(!areThereActiveTodos(project)) ? { backgroundColor: '#FFFFFF30', border: 'none', boxShadow: 'none' } : {}}
             >
-              <div
-                className={`absolute -top-3 -right-3 h-10 w-10 ${statusToBg(
-                  project.status,
-                )} rotate-[-8deg] rounded-md`}
-                aria-hidden="true"
+              <StatusIndicator
+                status={project.status}
+                onChange={(s) => setProjectStatus(project.title, s)}
+                className="absolute -top-3 -right-3"
               />
 
               <h2 className="text-[20px] leading-[1.2] font-semibold mb-3">
@@ -167,7 +166,7 @@ export default function ProjectsPage() {
 
       <TaskCreateModal
         isOpen={isCreateOpen}
-        projects={sortedProjects}
+        projects={projects}
         onClose={() => setIsCreateOpen(false)}
         onCreate={(projectTitle, text) => {
           const next = addTodoToProjects(projects, projectTitle, text)

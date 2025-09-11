@@ -28,4 +28,9 @@ export function toggleTodoById(projects: Project[], projectTitle: string, todoId
   })
 }
 
+export function areThereActiveTodos(project: Project): boolean {
+  if (project.todos.length === 0) return false
+  return project.todos.some((t) => !t.done)
+}
+
 
