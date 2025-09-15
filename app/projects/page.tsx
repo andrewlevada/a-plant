@@ -7,13 +7,20 @@ import ClearDoneButton from './ClearDoneButton'
 import AddTaskButton from './AddTaskButton'
 import EditDataButton from './EditDataButton'
 import { useProjects } from './lib/store'
+import { areThereActiveTodos } from './lib/todos'
+import { Project } from './lib/types'
 
 export default function ProjectsPage() {
   const projects = useProjects()
 
   const sortedProjects = useMemo(() => {
-    const rank = { red: 0, yellow: 1, green: 2 } as const
-    return projects.slice().sort((a, b) => rank[a.status] - rank[b.status])
+    const count = (a: Project) => {
+      const rank = { red: 0, yellow: 1, green: 2 } as const
+      const activeDiff = areThereActiveTodos(a) ? 0 : 1
+      return rank[a.status] * 10 + activeDiff
+    }
+
+    return projects.slice().sort((a, b) => count(a) - count(b))
   }, [projects])
 
   return (
