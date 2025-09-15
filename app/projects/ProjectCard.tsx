@@ -51,7 +51,7 @@ export default function ProjectCard({ project, className = '' }: ProjectCardProp
         }}
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <ul className="space-y-1.5">
+          <ul className="space-y-0">
             {project.todos.map((todo) => (
               <SortableTodoItem key={todo.id} projectTitle={project.title} id={todo.id} text={todo.text} done={todo.done} />
             ))}
@@ -125,7 +125,7 @@ function DragHandle({ ...props }: React.HTMLAttributes<HTMLButtonElement> & { re
     <button type="button" {...props}>
       <span className="sr-only">Drag handle</span>
       
-      <span aria-hidden className="pointer-events-none absolute inset-0 grid place-items-center text-slate-600">
+      <span aria-hidden className="pointer-events-none absolute inset-0 grid place-items-center text-black/40">
         <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
           <circle cx="2" cy="2" r="1" />
           <circle cx="2" cy="8" r="1" />

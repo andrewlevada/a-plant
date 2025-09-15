@@ -59,6 +59,13 @@ class ProjectsStore {
     this.persist(projects)
   }
 
+  addProject(title: string) {
+    const trimmed = title.trim()
+    if (trimmed.length === 0) return
+    const next: Project[] = [...this.projects, { title: trimmed, status: 'green', todos: [] }]
+    this.persist(next)
+  }
+
   addTodo(projectTitle: string, text: string) {
     const next = addTodoToProjects(this.projects, projectTitle, text)
     this.persist(next)

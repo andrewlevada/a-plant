@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import ProjectCard from './ProjectCard'
+import AddProjectCard from './AddProjectCard'
 import ClearDoneButton from './ClearDoneButton'
 import AddTaskButton from './AddTaskButton'
 import EditDataButton from './EditDataButton'
@@ -33,6 +34,7 @@ export default function ProjectsPage() {
           {sortedProjects.map((project) => (
             <ProjectCard key={project.title} project={project} />
           ))}
+          <AddProjectCard />
         </div>
       </div>
 
