@@ -23,23 +23,18 @@ export default function Home() {
         <div className="col-span-2 md:col-span-1 text-left space-y-2">
           <p>this is a place for my links</p>
 
-          <p className="text-[#ffff00]">my name is andrew (or andrey), 20 years old <br />
+          <p className="text-[#ffff00]">my name is andrew (or andrey), 21 years old <br />
           i really enjoy imagining and building digital things <br />
           that help, inspire, and feel nice</p>
-
-          <p>i&apos;d love to collab on building <br />
-          public benefit or socially important project <br />
-          <Link href="https://calendar.notion.so/meet/andrewlevada/cnux93o8a" target="_blank" className="underline">
-            book a call ↗
-          </Link></p>
         </div>
 
         <div className="col-span-1 text-center space-y-2 hidden md:block">
           <p>~ hi, welcome ~</p>
         </div>
 
-        <div className="col-span-1 text-right space-y-2">
-          <p>2025</p>
+        <div className="relative col-span-1 text-right space-y-2">
+          <p>🚧 202_ 🏗️  6 </p>
+          <p className="absolute top-[10px] right-[23px] rotate-12 w-fit h-fit">5</p>
           <p>{floatingLinks.length} links</p>
         </div>
       </div>
@@ -104,7 +99,7 @@ const floatingLinks: FloatingLink[] = [
     rotate: -4
   },
   {
-    href: "https://adrw.page/",
+    href: "https://pile-of-images.vercel.app",
     content: (<>↗ <br /> a pile <br /> of images</>),
     gridColumn: "18 / span 2",
     gridRow: "3 / span 2",
