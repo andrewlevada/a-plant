@@ -4,6 +4,7 @@ import Image from "next/image";
 import skyImage from "./sky.png";
 import Link from "next/link"
 import { motion } from "framer-motion"
+import VideoPlayer from "./components/VideoPlayer"
 
 export default function Home() {
   return (
@@ -38,6 +39,14 @@ export default function Home() {
           <p>{floatingLinks.length} links</p>
         </div>
       </div>
+
+      <VideoPlayer
+        src="/chisa.mp4"
+        poster="/chisa-poster.jpg"
+        width={200}
+        height={113}
+        className="absolute left-[200px] top-[200px] z-50"
+      />
 
       <div className="absolute inset-0 z-10 mix-blend-color-burn">
         <div className="absolute bottom-0 left-0 right-0 h-1/2 grid grid-cols-24 grid-rows-8 @container
