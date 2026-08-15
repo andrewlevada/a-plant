@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react'
 
 export default function Perspective() {
     const videoTag = useRef<HTMLVideoElement | null>(null)
@@ -16,13 +16,13 @@ export default function Perspective() {
     }, [])
 
     return <div className="flex flex-col items-center justify-center h-screen">
-      <video
-        className="w-[600px] h-auto top-[300px] left-[300px] bg-[#aaaaaa]"
-        ref={videoTag}
-        autoPlay
-    ></video>
+        <video
+            className="w-[600px] h-auto top-[300px] left-[300px] bg-[#aaaaaa]"
+            ref={videoTag}
+            autoPlay
+        ></video>
 
-    <canvas
-    ></canvas>
-    </div>;
-  }
+        <canvas
+        ></canvas>
+    </div>
+}

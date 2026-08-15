@@ -1,7 +1,7 @@
 'use client'
 
-import Image from "next/image";
-import skyImage from "./sky.png";
+import Image from "next/image"
+import skyImage from "./sky.png"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import VideoPlayer from "./components/VideoPlayer"
@@ -10,13 +10,13 @@ export default function Home() {
   return (
     <main className="w-screen h-screen relative">
       <div className="absolute inset-0 z-0">
-        <Image 
-          src={skyImage} 
-          alt="a photo of a sky i took on a road trip with my friends, saturation increased" 
+        <Image
+          src={skyImage}
+          alt="a photo of a sky i took on a road trip with my friends, saturation increased"
           placeholder="blur"
-          quality={100} 
-          fill 
-          className="object-cover" 
+          quality={100}
+          fill
+          className="object-cover"
         />
       </div>
 
@@ -25,8 +25,8 @@ export default function Home() {
           <p>this is a place for my links</p>
 
           <p className="text-[#ffff00]">my name is andrew (or andrey), 21 years old <br />
-          i really enjoy imagining and building digital things <br />
-          that help, inspire, and feel nice</p>
+            i really enjoy imagining and building digital things <br />
+            that help, inspire, and feel nice</p>
         </div>
 
         <div className="col-span-1 text-center space-y-2 hidden md:block">
@@ -48,23 +48,35 @@ export default function Home() {
         className="absolute left-[200px] top-[200px] z-50"
       />
 
+      <Link href="/internet-shaper">
+        <Image
+          src="/internet-shaper-note.png"
+          alt="a note about the internet shaper project"
+          quality={100}
+          width={200}
+          height={100}
+          className="absolute -bottom-[20px] right-[160px] -rotate-12 z-50 hover:-rotate-5 transition-all duration-150"
+        />
+      </Link>
+
+
       <div className="absolute inset-0 z-10 mix-blend-color-burn">
         <div className="absolute bottom-0 left-0 right-0 h-1/2 grid grid-cols-24 grid-rows-8 @container
           @[400px]:grid-cols-12 @[400px]:grid-rows-6
           @[300px]:grid-cols-6 @[300px]:grid-rows-4
           @[200px]:grid-cols-3 @[200px]:grid-rows-4">
           {floatingLinks.map((link) => (
-            <div 
-              className="flex items-center justify-center" 
+            <div
+              className="flex items-center justify-center"
               key={link.href}
-              style={{ 
+              style={{
                 gridColumn: link.gridColumn,
                 gridRow: link.gridRow
               }}
             >
               <motion.div
                 initial={{ y: 0, rotate: link.rotate, color: "#626245" }}
-                whileHover={{ 
+                whileHover={{
                   y: -10,
                   rotate: 0,
                   color: "#000000"
@@ -80,16 +92,16 @@ export default function Home() {
         </div>
       </div>
     </main>
-  );
+  )
 }
 
 interface FloatingLink {
-  href: string;
-  content: React.ReactNode;
-  gridColumn: string;
-  gridRow: string;
-  rotate: number;
-  internal?: boolean;
+  href: string
+  content: React.ReactNode
+  gridColumn: string
+  gridRow: string
+  rotate: number
+  internal?: boolean
 }
 
 const floatingLinks: FloatingLink[] = [
